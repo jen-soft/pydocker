@@ -168,17 +168,23 @@ class DockerFile(object):
             self.RUN = 'rm {}'.format(dst_path)
         #
 
-    def RUN_file_python(self, dst_path, fn, keep_file=False):
+    def RUN_file_bash(self, dst_path, content, keep_file=False):
+        content = '#!/usr/bin/env bash\n' + content
+        self.RUN_file(dst_path, content, keep_file)
+
+    def RUN_file_python(self, dst_path, fn, keep_file=False,
+                        python='/usr/bin/python'):
         if not isinstance(fn, str):
             from inspect import getsource
             fn = '{}\n{}()'.format(getsource(fn), fn.__name__)
         #
-        content = '#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n' + fn
-        self.RUN_file(dst_path, content, keep_file)
-
-    def RUN_file_bash(self, dst_path, content, keep_file=False):
-        content = '#!/usr/bin/env bash\n' + content
-        self.RUN_file(dst_path, content, keep_file)
+        content = '# -*- coding: utf-8 -*-\n' + fn
+        self.add_raw('\n')
+        self.COPY(dst_path, content + '\n')
+        self.RUN = '{} {}'.format(python, dst_path)
+        if not keep_file:
+            self.RUN = 'rm {}'.format(dst_path)
+        #
 #
 
 # ############################################################################ #
