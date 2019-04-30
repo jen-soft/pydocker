@@ -9,12 +9,12 @@ Easy generator Dockerfile for humans
         - generate many docker files from one template [testing, production, ]
         - generate sequence [Dockerfile.debian => Dockerfile.python => Dockefile.yourapp, ...]
         - or if you not expert in sed, awk - you can use python for modify conf files : )
-[easy code, easy costomize](https://github.com/jen-soft/pydocker/blob/master/pydocker.py#L104)
+<a href="https://github.com/jen-soft/pydocker/blob/master/pydocker.py#L104" target="_blank">easy code, easy costomize</a>
 
-# install 
+# Install
 <pre>sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py  "$(python -m site --user-site)/pydocker.py</pre>
 
-# using 
+# Using 
 <pre># Dockerfile.py</pre>
 ```python
 #!/usr/bin/env python
@@ -66,7 +66,7 @@ docker run -it --rm jen-soft/debian:8.2 ls -lah /opt
 </pre>
 
 
-## alternative usage:
+## Alternative usage:
 <pre>
 try: from pydocker import DockerFile
 except ImportError:
