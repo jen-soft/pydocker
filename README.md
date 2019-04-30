@@ -4,8 +4,8 @@ Easy generator Dockerfile for humans
     Let's use power of python for generate dockerfile!
     
     Advantages:
-        - all features from python: variables, mutiline strings, code reuse.
-        - keep all your codes in one file [bash, python, conf, ...]
+        - all features from python: variables, multiline strings, code reuse.
+        - keep all your code in one file [bash, python, conf, ...]
         - generate many docker files from one template [testing, production, ]
         - generate sequence [Dockerfile.debian => Dockerfile.python => Dockefile.yourapp, ...]
         - or if you not expert in sed, awk - you can use python for modify conf files : )
