@@ -146,8 +146,10 @@ class DockerFile(object):
 
     # -------------------------------------------------------------------- #
 
-    def RUN(self, dst_path, content):
-        self.__setattr__('RUN', self.file(dst_path, content))
+    def RUN(self, *args):
+        for cmd in args:
+            self.__setattr__('RUN', cmd)
+        #
 
     def COPY(self, dst_path, content):
         self.__setattr__('COPY', self.file(dst_path, content))
