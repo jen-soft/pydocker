@@ -23,7 +23,12 @@ sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py -
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from pydocker import DockerFile
+import pydocker
+
+
+class DockerFile(pydocker.DockerFile):
+    """ add own custom features """
+
 
 d = DockerFile(name=os.path.basename(__file__).rsplit('.', 1)[0])
 
