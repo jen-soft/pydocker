@@ -12,7 +12,7 @@ Easy generator Dockerfile for humans
 <a href="https://github.com/jen-soft/pydocker/blob/master/pydocker.py#L104" target="_blank">easy code, easy costomize</a>
 
 # Install
-<pre>sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py  "$(python -m site --user-site)/pydocker.py</pre>
+<pre>sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py  "$(python -m site --user-site)/pydocker.py"</pre>
 
 # Using 
 <pre># Dockerfile.py</pre>
