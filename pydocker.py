@@ -60,7 +60,7 @@ try: from pydocker import DockerFile
 except ImportError:
     try: from urllib.request import urlopen         # python-3
     except ImportError: from urllib import urlopen  # python-2
-    exec(urlopen('raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py').read())
+    exec(urlopen('https://raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py').read())
 #
 d = DockerFile(name=os.path.basename(__file__).rsplit('.', 1)[0])
 # ...
