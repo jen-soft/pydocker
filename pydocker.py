@@ -145,7 +145,11 @@ class DockerFile(object):
         #   #
 
     # -------------------------------------------------------------------- #
-
+    def LABEL(self, *args, **kwargs):
+        for k, v in kwargs.items():
+            self.__setattr__('LABEL', '{}="{}"'.format(k, v))
+        #
+    
     def RUN(self, *args):
         for cmd in args:
             if cmd.strip():
@@ -169,7 +173,7 @@ class DockerFile(object):
             from inspect import getsource
             fn = '{}\n{}()'.format(getsource(fn), fn.__name__)
         #
-        content = '#!/usr/bin/env bash\n# -*- coding: utf-8 -*-\n' + fn
+        content = '#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n' + fn
         self.RUN_file(dst_path, content, keep_file)
 
     def RUN_file_bash(self, dst_path, content, keep_file=False):
