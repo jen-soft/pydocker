@@ -96,6 +96,7 @@ limitations under the License.
 
 import os
 import re
+import json
 
 # ############################################################################ #
 
@@ -117,6 +118,9 @@ class DockerFile(object):
         #
         if key in ['WORKDIR', 'SHELL', 'ENTRYPOINT', 'CMD', 'USER', ]:
             self.content += '\n'
+        #
+        if not isinstance(value, str):
+            value = json.dumps(value)
         #
         self.content += '{} {}\n'.format(key, value)
         #
