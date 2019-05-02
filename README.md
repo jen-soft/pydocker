@@ -20,68 +20,64 @@ sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py -
 # Using 
 <pre># Dockerfile.py</pre>
 ```python
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import os
-import pydocker
+import sys
+import logging
+import pydocker  # github.com/jen-soft/pydocker
+
+logging.getLogger('').setLevel(logging.INFO)
+logging.root.addHandler(logging.StreamHandler(sys.stdout))
 
 
 class DockerFile(pydocker.DockerFile):
-    """ add own custom features """
+    '''   add here your custom features   '''
 
+d = DockerFile(base_img='debian:8.2', name='jen-soft/custom-debian:8.2')
 
-d = DockerFile(name=os.path.basename(__file__).rsplit('.', 1)[0])
+d.RUN_bash_script('/opt/set_repo.sh', r'''
+```
+```bash
+cp /etc/apt/sources.list /etc/apt/sources.list.copy
 
-d.FROM = 'debian:8.2'
-d.LABEL = 'maintainer="jen-soft <jen.soft.master@gmail.com>"'
-d.RUN = 'apt-get update'
+cat >/etc/apt/sources.list <<EOL
+deb     http://security.debian.org/ jessie/updates main
+deb-src http://security.debian.org/ jessie/updates main
+deb     http://ftp.nl.debian.org/debian/ jessie main
+deb-src http://ftp.nl.debian.org/debian/ jessie main
+deb     http://ftp.nl.debian.org/debian/ testing main
+EOL
 
-d.RUN_file_bash('/opt/init_pg.sh', '''
-/usr/bin/supervisord -c /etc/supervisor/supervisord.conf &
-sleep 20
-cd ~postgres/
-su postgres -c "psql -c \"ALTER USER postgres WITH PASSWORD 'postgres';\" "
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+apt-get clean && apt-get update
+```
+```python
 ''')
 
-
-def py_version():
-    import os, sys, pwd
-    with open('py-version.txt', 'w+') as f:
-        f.write('user: '.format(pwd.getpwuid(os.getuid()).pw_name))
-        f.write('python-version'.format(sys.version))
-#   #
-d.RUN_file_python('/opt/run_up_info.py', py_version, True)
-
+d.EXPOSE = 80
 d.WORKDIR = '/opt'
-d.CMD = ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
 
-d.create_files()
-# will created next files:
-#   Dockerfile
-#   Dockerfile.0@init_pg.sh         # d.RUN_file_bash
-#   Dockerfile.1@run_up_info.py     # d.RUN_file_python
+# d.ENTRYPOINT = ["/opt/www-data/entrypoint.sh"]
+d.CMD = ["python", "--version"]
+
+d.build_img()
+
 ```
 
-<pre>
+```bash
 # >_ console:
 
 python3 Dockerfile.py
-ls -lah
-cat -n Dockerfile
-docker build  --tag jen-soft/debian:8.2  --file=Dockerfile ./
-docker run -it --rm jen-soft/debian:8.2 ls -lah /opt
-
-</pre>
+docker images
+```
 
 
-## Alternative usage:
-<pre>
+## Alternative usage (without installation):
+```python
 try: from pydocker import DockerFile
 except ImportError:
     try: from urllib.request import urlopen         # python-3
     except ImportError: from urllib import urlopen  # python-2
     exec(urlopen('https://raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py').read())
 #
-d = DockerFile(name=os.path.basename(__file__).rsplit('.', 1)[0])
+d = DockerFile(base_img='debian:8.2', name='jen-soft/custom-debian:8.2')
 # ...
-</pre>
+```
