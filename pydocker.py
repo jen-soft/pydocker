@@ -161,6 +161,7 @@ class DockerFile(object):
         #   #
 
     def COPY(self, dst_path, content):
+        content = content.strip() + '\n'
         self.__setattr__('COPY', self.file(dst_path, content))
 
     def RUN_file(self, dst_path, content, keep_file=False):
