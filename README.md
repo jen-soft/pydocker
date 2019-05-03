@@ -122,4 +122,4 @@ docker images
 ## License
 
 This work is dual-licensed under **Apache License 2.0** <ins>and</ins> **MIT License**.
-You can choose between one of them if you use this work.
+<ins>You can choose</ins> between one of them if you use this work.
