@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 
@@ -15,14 +15,20 @@ username=jen-soft
 password=secret
 
 [pypi]
-repository=https://pypi.python.org/pypi
+repository=https://upload.pypi.org/legacy/
 username=jen-soft
 password=secret
 
 # ------------------------------------------------------------------------------
-# python setup.py bdist_wheel       # WHL
-python setup.py sdist             # EGG
-python setup.py sdist upload -r testpypi
+# curl https://bootstrap.pypa.io/get-pip.py | python3.4
+# python3.4 -m pip install -U setuptools
+# python3.4 -m pip install -U pip
+# python3.4 -m pip install -U six
+# python3.4 -m pip install -U twine
+
+# python3.4 setup.py bdist_wheel       # WHL
+python3.4 setup.py sdist            # EGG
+python3.4 -m twine upload dist/* -r testpypi
 
 # https://test.pypi.org/project/pydocker
 # pip install --no-cache-dir -U -i https://test.pypi.org/pypi pydocker
@@ -33,20 +39,17 @@ python setup.py sdist upload -r testpypi
 rm -rf ./dist
 # change version
 # commit, add git tag, add download url
-python setup.py sdist             # EGG
+python3.4 setup.py sdist             # EGG
+python3.4 -m twine upload dist/* -r pypi
 
 # ------------------------------------------------------------------------------
 
 """
-from distutils.core import setup
 
-try:
-    import pypandoc  # apt-get install pandoc &&  pip install pypandoc
-    long_description = pypandoc.convert('README.md', format='md', to='rst', )
-except Exception as e:
-    print(e)
-    with open("README.md", "r") as fh:
-        long_description = fh.read()
+from setuptools import setup
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 #   #
 
 
@@ -67,13 +70,12 @@ setup(
     maintainer_email='jen.soft.master@gmail.com',
 
     platforms=['any', ],
-    download_url='https://github.com/jen-soft/pydocker/archive/v0.0.1.zip',
+    download_url='https://github.com/jen-soft/pydocker/archive/v1.0.1.zip',
 
     # packages=['pydocker', ],
     py_modules=['pydocker', ],
 
-    install_requires=[
-    ],
+    install_requires=[],
     keywords=[
         'dockerfile',
         'docker',
