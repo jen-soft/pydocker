@@ -12,7 +12,8 @@ Easy generator Dockerfile for humans
 <a href="https://github.com/jen-soft/pydocker/blob/master/pydocker.py#L104" target="_blank">easy code, easy costomize</a>
 
 # Install
-pip install -U pydocker
+    # sudo apt-get install python-setuptools && sudo easy_install pip
+    pip install -U pydocker
 
 
 # Using 

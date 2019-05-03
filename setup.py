@@ -33,14 +33,17 @@ python3.4 -m twine upload dist/* -r testpypi
 # https://test.pypi.org/project/pydocker
 # pip install --no-cache-dir -U -i https://test.pypi.org/pypi pydocker
 
-# git tag -a v1.0.1 -m 'version 1.0.1'
+# git tag -a v1.0.3 -m 'version 1.0.3'
 
 # ------------------------------------------------------------------------------
 rm -rf ./dist
-# change version
-# commit, add git tag, add download url
+rm -rf ./pydocker.egg-info/
+# change version, commit, add download url, add git tag,
 python3.4 setup.py sdist             # EGG
 python3.4 -m twine upload dist/* -r pypi
+
+# pip install --no-cache-dir -U pydocker==1.0.3
+# ls -lah /usr/local/lib/python2.7/dist-packages | grep pydocker
 
 # ------------------------------------------------------------------------------
 
@@ -55,7 +58,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pydocker',
-    version='1.0.1',
+    version='1.0.3',
 
     description='Easy generator Dockerfile for humans.',
     long_description=long_description,
@@ -70,7 +73,7 @@ setup(
     maintainer_email='jen.soft.master@gmail.com',
 
     platforms=['any', ],
-    download_url='https://github.com/jen-soft/pydocker/archive/v1.0.1.zip',
+    download_url='https://github.com/jen-soft/pydocker/archive/v1.0.3.zip',
 
     # packages=['pydocker', ],
     py_modules=['pydocker', ],

@@ -67,6 +67,9 @@ d = DockerFile(base_img='debian:8.2', name='jen-soft/custom-debian:8.2')
 change log:
     v0.0.1      Tue 30 Apr 2019 06:12:04 AM UTC     jen
             - created
+    v1.0.3      Fri May  3 13:19:29 UTC 2019     jen
+            - release 1.0.3
+
 
 --------------------------------------------------------------------------------
 contributors:
@@ -197,7 +200,7 @@ class DockerFile(object):
         #
 
     # -------------------------------------------------------------------- #
-    def generate_files(self, *, dockefile_name=None, path='./',
+    def generate_files(self, dockefile_name=None, path='./',
                        remove_old_files=True):
         if dockefile_name is None:
             dockefile_name = 'Dockerfile.{}'.format(self._name)
@@ -276,4 +279,7 @@ class DockerFile(object):
 #
 
 # ############################################################################ #
+
+
+Dockerfile = DockerFile  # alias
 
