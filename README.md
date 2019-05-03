@@ -29,7 +29,8 @@ logging.root.addHandler(logging.StreamHandler(sys.stdout))
 
 
 class DockerFile(pydocker.DockerFile):
-    '''   add here your custom features   '''
+    """   add here your custom features   """
+
 
 d = DockerFile(base_img='debian:8.2', name='jen-soft/custom-debian:8.2')
 
