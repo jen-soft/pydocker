@@ -69,6 +69,8 @@ change log:
             - created
     v1.0.3      Fri May  3 13:19:29 UTC 2019     jen
             - release 1.0.3
+    v1.0.4      Fri May  3 14:18:31 UTC 2019     jen
+            - fix regex validation of img name
 
 
 --------------------------------------------------------------------------------
@@ -134,9 +136,9 @@ class DockerFile(object):
         if _r is None:
             raise ValueError('invalid img name "{}", '
                              'should be as "local/base:0.0.1"'.format(name))
-        self._namespace = _r['namespace']
-        self._name = _r['name']
-        self._version = _r['version']
+        self._namespace = _r.group('namespace')
+        self._name = _r.group('name')
+        self._version = _r.group('version')
 
     def get_img_name(self):
         return '{}/{}:{}'.format(
