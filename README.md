@@ -12,10 +12,8 @@ Easy generator Dockerfile for humans
 <a href="https://github.com/jen-soft/pydocker/blob/master/pydocker.py#L104" target="_blank">easy code, easy costomize</a>
 
 # Install
-<pre>
-F=$(python -c "import site; print(site.getsitepackages()[0]+'/pydocker.py')")
-sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py -O $F
-</pre>
+pip install -U pydocker
+
 
 # Using 
 <pre># Dockerfile.py</pre>
@@ -71,6 +69,12 @@ docker images
 ```
 
 
+## Alternative installation (without pip - from repo/master):
+<pre>
+F=$(python -c "import site; print(site.getsitepackages()[0]+'/pydocker.py')")
+sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py -O $F
+</pre>
+
 ## Alternative usage (without installation):
 ```python
 try: from urllib.request import urlopen         # python-3
@@ -80,3 +84,8 @@ exec(urlopen('https://raw.githubusercontent.com/jen-soft/pydocker/master/pydocke
 d = DockerFile(base_img='debian:8.2', name='jen-soft/custom-debian:8.2')
 # ...
 ```
+
+## License
+
+This work is dual-licensed under Apache License 2.0 and MIT License.
+You can choose between one of them if you use this work.

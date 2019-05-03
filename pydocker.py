@@ -222,11 +222,8 @@ class DockerFile(object):
                     'invalid instruction type {}'.format(instruction))
             #
         #
-        return self._create_files(
-            path,
-            [[dockefile_name, result], *files],
-            remove_old_files,
-        )
+        files = [[dockefile_name, result], ] + files
+        return self._create_files(path, files, remove_old_files)
 
     @staticmethod
     def _create_files(path, files, remove_old_files):
