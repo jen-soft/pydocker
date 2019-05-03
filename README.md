@@ -70,21 +70,54 @@ docker images
 ```
 
 
-## Alternative installation (without pip - from repo/master):
-<pre>
-F=$(python -c "import site; print(site.getsitepackages()[0]+'/pydocker.py')")
-sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py -O $F
-</pre>
+## Alternative uage: 
+- install from repo (without pip)
+    ```bahs
+    F=$(python -c "import site; print(site.getsitepackages()[0]+'/pydocker.py')")
+    sudo wget -v -N raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py -O $F
+    ```
 
-## Alternative usage (without installation):
-```python
-try: from urllib.request import urlopen         # python-3
-except ImportError: from urllib import urlopen  # python-2
-exec(urlopen('https://raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py').read())
-#
-d = DockerFile(base_img='debian:8.2', name='jen-soft/custom-debian:8.2')
-# ...
-```
+ - without any installation:
+    ```python
+    try: from urllib.request import urlopen         # python-3
+    except ImportError: from urllib import urlopen  # python-2
+    exec(urlopen('https://raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py').read())
+    #
+    d = DockerFile(base_img='debian:8.2', name='jen-soft/custom-debian:8.2')
+    # ...
+    ```
+    * Helpful if you need just build img
+    
+- not required installation
+    ```python
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+    try:
+        from pydocker import DockerFile  # pip install -U pydocker
+    except ImportError:
+        try:
+            from urllib.request import urlopen         # python-3
+        except ImportError:
+            from urllib import urlopen  # python-2
+        #
+        exec(urlopen('https://raw.githubusercontent.com/jen-soft/pydocker/master/pydocker.py').read())
+    #
+    import sys
+    import logging
+
+    logging.getLogger('').setLevel(logging.INFO)
+    logging.root.addHandler(logging.StreamHandler(sys.stdout))
+
+
+    class MyDockerFile(DockerFile):
+        """   add here your custom features   """
+    #
+
+
+    d = MyDockerFile(base_img='debian:8.2', name='jen-soft/debian:8.2')
+    # ...
+    ```
+    * Helpful if you need share your Dockerfile.py
 
 ## License
 
