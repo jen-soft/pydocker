@@ -72,6 +72,9 @@ change log:
     v1.0.4      Fri May  3 14:18:31 UTC 2019     jen
             - fix regex validation of img name
 
+    v1.0.5      Sat Jun 15 11:21:02 UTC 2019     jen
+            - add error trace for RUN_bash_script
+
 
 --------------------------------------------------------------------------------
 contributors:
@@ -182,7 +185,20 @@ class DockerFile(object):
         self.add_new_file(dst_path, content, chmod=chmod)
 
     def RUN_bash_script(self, dst_path, content, keep_file=False):
-        content = '#!/usr/bin/env bash\nset -o xtrace\n' + content
+        # https://stackoverflow.com/questions/22009364/is-there-a-try-catch-command-in-bash
+        # https://unix.stackexchange.com/questions/462156/how-do-i-find-the-line-number-in-bash-when-an-error-occured
+        content = '''
+#!/usr/bin/env bash
+set -e -o xtrace
+
+function _failure() {
+  echo -e "\\r\\nERROR: bash script [ %(script_name)s ] failed at line $1: \\"$2\\""
+}
+trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
+
+# ############################################################################ #
+        '''.strip() % {'script_name': dst_path} + '\n\n'+ content
+
         self.COPY(dst_path, content, chmod='+x')
         self.RUN = dst_path
         if not keep_file:
