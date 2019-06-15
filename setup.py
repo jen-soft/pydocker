@@ -34,6 +34,7 @@ python3.4 -m twine upload dist/* -r testpypi
 # pip install --no-cache-dir -U -i https://test.pypi.org/pypi pydocker
 
 # git tag -a v1.0.5 -m 'version 1.0.5'
+# git push origin --tags
 
 # ------------------------------------------------------------------------------
 rm -rf ./dist
