@@ -284,6 +284,7 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         #
         log.info('Execute "{}"'.format(cmd))
         #
+        print(cmd)
         p = subprocess.Popen(
             [cmd, ], shell=True,
             stdout=sys.stdout, stderr=sys.stderr,
