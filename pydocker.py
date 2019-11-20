@@ -258,8 +258,8 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         result_files = []
         for name, content in files:
             file_path = os.path.join(path, name)
-            with open(file_path, 'w+') as file:
-                file.write(content)
+            with open(file_path, 'wb+') as file:
+                file.write(content.encoding('utf-8'))
                 file.flush()
             #
             result_files.append(file_path)
