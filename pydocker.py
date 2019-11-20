@@ -274,7 +274,7 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         files = self.generate_files()
         dirname, filename = os.path.split(files[0])
 
-        cmd = 'docker.exe build  --tag {tag}  --file={docker_file} {path}/ '.format(
+        cmd = 'docker build  --tag {tag}  --file={docker_file} {path}/ '.format(
             tag=self.get_img_name(),
             docker_file=filename,
             path=dirname,
@@ -284,9 +284,8 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         #
         log.info('Execute "{}"'.format(cmd))
         #
-        print(cmd)
         p = subprocess.Popen(
-            [cmd, ], shell=True,
+            cmd, shell=True,
             stdout=sys.stdout, stderr=sys.stderr,
             stdin=subprocess.PIPE,
         )
