@@ -267,16 +267,17 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         return result_files
 
     # -------------------------------------------------------------------- #
-    def build_img(self, remove_out_files=True):
+    def build_img(self, remove_out_files=True, extra_args=''):
 
         log.info('Build new docker img {}'.format(self.get_img_name()))
         #
         files = self.generate_files()
         dirname, filename = os.path.split(files[0])
 
-        cmd = 'docker build  --tag {tag}  --file={docker_file} {path}/ '.format(
+        cmd = 'docker build  --tag {tag}  --file={docker_file}  {args}  {path}/ '.format(
             tag=self.get_img_name(),
             docker_file=filename,
+            args=extra_args,
             path=dirname,
         )
         #
