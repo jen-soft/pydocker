@@ -122,7 +122,7 @@ class DockerFile(object):
             None for i in range(17)]
 
     _regex = re.compile(
-        r'(?P<namespace>[0-9A-Za-z-\_\.]+)/'
+        r'(?P<namespace>[0-9A-Za-z-\_\./]+)/'
         r'(?P<name>[0-9A-Za-z\-\_\.]+):'
         r'(?P<version>[0-9A-Za-z\-\_\.]+)'
     )
