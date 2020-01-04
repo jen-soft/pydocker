@@ -122,7 +122,7 @@ class DockerFile(object):
             None for i in range(17)]
 
     _regex = re.compile(
-        r'(?P<namespace>[0-9A-Za-z-\_\.]+)/'
+        r'(?P<namespace>[0-9A-Za-z-\_\./]+)/'
         r'(?P<name>[0-9A-Za-z\-\_\.]+):'
         r'(?P<version>[0-9A-Za-z\-\_\.]+)'
     )
@@ -258,8 +258,8 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         result_files = []
         for name, content in files:
             file_path = os.path.join(path, name)
-            with open(file_path, 'w+') as file:
-                file.write(content)
+            with open(file_path, 'wb+') as file:
+                file.write(content.encode('utf-8'))
                 file.flush()
             #
             result_files.append(file_path)
@@ -267,16 +267,17 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         return result_files
 
     # -------------------------------------------------------------------- #
-    def build_img(self, remove_out_files=True):
+    def build_img(self, remove_out_files=True, extra_args=''):
 
         log.info('Build new docker img {}'.format(self.get_img_name()))
         #
         files = self.generate_files()
         dirname, filename = os.path.split(files[0])
 
-        cmd = 'docker build  --tag {tag}  --file={docker_file} {path}/ '.format(
+        cmd = 'docker build  --tag {tag}  --file={docker_file}  {args}  {path}/ '.format(
             tag=self.get_img_name(),
             docker_file=filename,
+            args=extra_args,
             path=dirname,
         )
         #
@@ -285,7 +286,7 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
         log.info('Execute "{}"'.format(cmd))
         #
         p = subprocess.Popen(
-            [cmd, ], shell=True,
+            cmd, shell=True,
             stdout=sys.stdout, stderr=sys.stderr,
             stdin=subprocess.PIPE,
         )
