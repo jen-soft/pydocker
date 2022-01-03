@@ -75,6 +75,13 @@ change log:
     v1.0.5      Sat Jun 15 11:21:02 UTC 2019     jen
             - add error trace for RUN_bash_script
 
+    v1.0.6      Mon Jan  3 22:35:21 UTC 2022     jen
+            - add DockerFileV105a
+            - allow run sh script without provide dst-path
+            - unique tag - useful for development new dockerfile
+
+            - add generate_img_name
+
 
 --------------------------------------------------------------------------------
 contributors:
@@ -105,6 +112,8 @@ import sys
 import re
 import json
 import subprocess
+import hashlib
+import datetime
 
 import logging
 
@@ -114,7 +123,7 @@ log = logging.getLogger(__name__)
 
 
 # ############################################################################ #
-class DockerFile(object):
+class DockerFileV105(object):
     # https://docs.docker.com/engine/reference/builder/
 
     FROM, LABEL, COPY, RUN, WORKDIR, ENV, SHELL, EXPOSE, ENTRYPOINT, CMD, \
@@ -149,7 +158,7 @@ class DockerFile(object):
 
     def __setattr__(self, key, value):
         if key.startswith('_'):
-            return super(DockerFile, self).__setattr__(key, value)
+            return super(DockerFileV105, self).__setattr__(key, value)
         #
         if not isinstance(value, str):
             value = json.dumps(value)
@@ -298,6 +307,79 @@ trap '_failure ${LINENO} "$BASH_COMMAND"' ERR
 
 # ############################################################################ #
 
+class DockerFileV106(DockerFileV105):
+    """
+        add features:
+            - allow run sh script without provide dst-path
+            - unique tag - useful for development new dockerfile
 
-Dockerfile = DockerFile  # alias
+            - add generate_img_name
+    """
+    def __init__(self, base_img, name, use_build_time_prefix=False):
+        super(DockerFileV106, self).__init__(base_img, name)
+        self._use_build_time_prefix = use_build_time_prefix
+
+    def RUN_bash_script(self, dst_path: str, content=None, keep_file=False):
+        if content is None:
+            # feature - allow run sh script without provide dst-path
+            assert keep_file is False
+            content = dst_path
+            _name_sold = hashlib.sha256(
+                content.encode()
+            ).hexdigest()[:24]
+            _counter = getattr(self, '_counter', 0)
+            _counter += 1
+            setattr(self, '_counter', _counter)
+            dst_path = f'/opt/random_{_counter:02d}_{_name_sold}.sh'
+        #
+        return super(DockerFileV106, self).RUN_bash_script(dst_path, content, keep_file)
+
+    def get_img_name(self):
+        _img_name = getattr(self, '_img_name', None)
+        if _img_name is None:
+            # use cashing for ime_prefix feature
+            _img_name = self.generate_img_name()
+            setattr(self, '_img_name', _img_name)
+        #
+        return _img_name
+
+    def generate_img_name(self):
+        if self._use_build_time_prefix is True:
+            # feature - unique tag - useful for development new dockerfile
+            # need to check if docker-file has new changes
+            _build_time_id = f'{datetime.datetime.utcnow():%y%m%d%H%M%S}'
+            return f'{self._namespace}/{self._name}' \
+                   f':' \
+                   f'{self._version}-build-{_build_time_id}'
+        #
+        return super(DockerFileV106, self).get_img_name()
+
+# ############################################################################ #
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+DockerFileLatestStable = DockerFileV105     # stable using for long time
+DockerFileLatestAlpha = DockerFileV106      # newest version for more features
+
+DockerFile = DockerFileLatestStable         # by default - stable
+
+# it's allow you to use more appropriate release in your code
+# you can user full compatibility version DockerFileLatestStable
+# or maximum feature DockerFileLatestAlpha
+# or take direct DockerFileV106 for fixation any api changes in feature
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# aliases - using naming Dockerfile instead DockerFile
+DockerfileV105 = DockerFileV105
+DockerfileV106 = DockerFileV106
+
+DockerfileLatestStable = DockerFileLatestStable
+DockerfileLatestAlpha = DockerFileLatestAlpha
+Dockerfile = DockerFile
+
+
+
+
+
 
